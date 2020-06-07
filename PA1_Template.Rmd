@@ -1,0 +1,49 @@
+---
+title: "PA1_template"
+author: "CA"
+date: "07/06/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(DT)
+
+## Import the file
+
+setwd("C:/Users/ancjxs/Downloads/Base_stats_Coursera")
+activity <- read.csv("activity.csv", na.strings = "Not Available", stringsAsFactors=FALSE)
+
+```
+
+## Investigate the number of steps per day
+
+```{r steps, echo=TRUE}
+
+# Summarise the number of steps by day in a table
+
+activity_day <- activity %>%
+  filter(steps != "NA") %>%
+  mutate(steps_n = as.numeric(steps))%>%
+  group_by(date) %>%
+  summarise(steps_n = sum(steps_n, na.rm = TRUE)) %>%
+  ungroup()
+
+# Calculate the mean and median
+
+activity_day_mean <- round(mean(activity_day$steps_n),2)
+activity_day_median <- round(median(activity_day$steps_n),2)
+
+# Generate a histogram
+
+hist(activity_day$steps_n, 
+     breaks=10,
+     main="Steps per day", 
+     col="blue", 
+     xlab="Number of steps")
+
+```
+
+The mean steps per day is *`r as.integer(activity_day_mean)`*  
+The median of steps taken per day is *`r as.integer(activity_day_median)`*   
